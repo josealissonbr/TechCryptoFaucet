@@ -46,7 +46,7 @@ Coded by www.creative-tim.com
           <!-- <p>CT</p> -->
         </a>
         <a class="simple-text logo-normal">
-          Tech Crypto Faucet
+          Crypto Faucet
           <!-- <div class="logo-image-big">
             <img src="../assets/img/logo-big.png">
           </div> -->
