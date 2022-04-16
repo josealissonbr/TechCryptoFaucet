@@ -17,3 +17,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('view/home', function() {
+    return view('admin.pages.home');
+});
+
+Route::get('view/users', function() {
+    return view('admin.pages.users');
+});
