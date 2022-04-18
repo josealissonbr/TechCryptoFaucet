@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use \Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,9 +15,20 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('app');
 });
 
 Route::get('admin', function () {
     return view('admin.app');
+})->name('admin.home');
+
+Route::get('auth/login/view', function() {
+    return view('auth.login');
 });
+
+Route::post('auth/login', function (Request $request) {
+
+    return $request->all();
+});
+
+//Route::get('login', [AuthController::class, 'index'])->name('login');
