@@ -24,6 +24,12 @@
 			<div class="row justify-content-center">
 				<div class="col-md-7 col-lg-5">
 					<div class="login-wrap p-4 p-md-5">
+						<div class="alert alert-danger alert-dismissible fade show" id="notification__" style="display: none;">
+							<button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+							  <i class="nc-icon nc-simple-remove"></i>
+							</button>
+							<span><b> Danger - </b> This is a regular notification made with ".alert-danger"</span>
+						  </div>
 		      	<div class="d-flex">
 		      		<div class="w-100">
 		      			<h3 class="mb-4">Login</h3>
@@ -53,7 +59,7 @@
 									</label>
 								</div>
 								<div class="w-100 d-flex justify-content-end">
-		            	<a onclick="submitLogin" id="submitBtn"  class="btn btn-primary rounded submit">Login</a>
+		            	<a onclick="submitLogin();" id="submitBtn"  class="btn btn-primary rounded submit">Login</a>
 	            	</div>
 	            </div>
 	            <div class="form-group mt-4">
@@ -77,7 +83,10 @@
     function submitLogin(){
       event.preventDefault();
       document.getElementById('submitBtn').setAttribute("class", "")
-      document.getElementById('submitBtn').setAttribute("class", "")
+      document.getElementById('submitBtn').text = "Checking..."
+
+	  let notification__ = document.getElementById('notification__');
+
       var formData = new FormData(document.getElementById('loginform'));// yourForm: form selector        
       $.ajax({
           type: "POST",
@@ -88,10 +97,39 @@
           error: function(jqXHR, textStatus, errorMessage) {
               console.log(errorMessage); // Optional
               document.getElementById('submitBtn').setAttribute("class", "btn btn-primary rounded submit")
+			  document.getElementById('submitBtn').text = "Login"
           },
           success: function(data) {
-            console.log(data)
-            document.getElementById('submitBtn').setAttribute("class", "btn btn-primary rounded submit")
+            
+			let jsonData = JSON.parse(JSON.stringify(data));
+			
+			console.log(jsonData)
+			if (jsonData.status == "error"){
+				notification__.setAttribute("style", "display: block;")
+				notification__.setAttribute("class", "alert alert-danger fade show")
+				notification__.innerHTML  = "<b> Error - </b> " + jsonData.message
+				document.getElementById('submitBtn').setAttribute("class", "btn btn-primary rounded submit")
+			  	document.getElementById('submitBtn').text = "Login"
+			}
+			else if (jsonData.status == "success"){
+				notification__.setAttribute("style", "display: block;")
+				notification__.setAttribute("class", "alert alert-success fade show")
+				notification__.innerHTML  = "<b> Success - </b> Logged in, redirecting to Dashboard..."
+				
+				setTimeout(function() {
+					window.location.replace(jsonData.redirector);
+				}, 1200)
+
+			  	document.getElementById('submitBtn').text = "Login success!"	
+			}else{
+				notification__.setAttribute("style", "display: block;")
+				notification__.setAttribute("class", "alert alert-danger fade show")
+				notification__.innerHTML  = "<b> Error - </b> " + jsonData.message
+			}
+			
+
+            //.getElementById('submitBtn').setAttribute("class", "btn btn-primary rounded submit")
+			
           } 
       });
     }
